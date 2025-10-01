@@ -32,16 +32,15 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     @Override
     public V get(K key) {
-        for (Pair<K, V> kvPair : storageArray) {
-            if (isKeyEqual(kvPair, key)) {
-                return kvPair.getValue();
-            }
+        Pair<K, V> currentPair = getPair(key);
+        if (currentPair != null) {
+            return currentPair.getValue();
         }
 
         return null;
     }
 
-    public Pair<K, V> getPair(K key) {
+    private Pair<K, V> getPair(K key) {
         for (Pair<K, V> kvPair : storageArray) {
             if (isKeyEqual(kvPair, key)) {
                 return kvPair;
@@ -51,7 +50,7 @@ public class StorageImpl<K, V> implements Storage<K, V> {
         return null;
     }
 
-    public boolean isKeyEqual(Pair<K, V> kvPair, K key) {
+    private boolean isKeyEqual(Pair<K, V> kvPair, K key) {
         return kvPair != null && ((kvPair.getKey() == null && key == null)
                 || (kvPair.getKey() != null && kvPair.getKey().equals(key)));
     }
