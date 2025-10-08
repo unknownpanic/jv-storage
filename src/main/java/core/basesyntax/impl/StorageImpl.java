@@ -9,7 +9,6 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     public StorageImpl() {
         storageArray = new Pair[MAX_ITEMS_NUMBER];
-        currentSize = 0;
     }
 
     @Override
@@ -19,13 +18,12 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     @Override
     public void put(K key, V value) {
-        int availableIndex = currentSize;
         Pair<K, V> currentPair = getPair(key);
 
         if (currentPair != null) {
             currentPair.setValue(value);
-        } else if (availableIndex < MAX_ITEMS_NUMBER) {
-            storageArray[availableIndex] = new Pair<K, V>(key, value);
+        } else if (currentSize < MAX_ITEMS_NUMBER) {
+            storageArray[currentSize] = new Pair<K, V>(key, value);
             currentSize++;
         }
     }
@@ -51,7 +49,8 @@ public class StorageImpl<K, V> implements Storage<K, V> {
     }
 
     private boolean isKeyEqual(Pair<K, V> kvPair, K key) {
-        return kvPair != null && ((kvPair.getKey() == null && key == null)
-                || (kvPair.getKey() != null && kvPair.getKey().equals(key)));
+        return (kvPair == null ? key == null
+                : (kvPair.getKey() == null ? key == null
+                : kvPair.getKey().equals(key)));
     }
 }
